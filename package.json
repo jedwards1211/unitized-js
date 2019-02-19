@@ -1,7 +1,7 @@
 {
-  "name": "es2015-library-skeleton",
+  "name": "unitized",
   "version": "0.0.0-development",
-  "description": "my personal ES2015 library project skeleton",
+  "description": "nice API for handling numbers with associated units",
   "main": "index.js",
   "module": "es/index.js",
   "sideEffects": false,
@@ -65,17 +65,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jedwards1211/es2015-library-skeleton.git"
+    "url": "https://github.com/jedwards1211/unitized.git"
   },
   "keywords": [
-    "es2015"
+    "unit-conversion"
   ],
   "author": "Andy Edwards",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jedwards1211/es2015-library-skeleton/issues"
+    "url": "https://github.com/jedwards1211/unitized/issues"
   },
-  "homepage": "https://github.com/jedwards1211/es2015-library-skeleton#readme",
+  "homepage": "https://github.com/jedwards1211/unitized#readme",
   "devDependencies": {
     "@babel/cli": "^7.1.5",
     "@babel/core": "^7.1.6",
