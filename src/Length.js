@@ -8,15 +8,29 @@ export class LengthUnit implements Unit<Length> {
   +type: Length
   +fromMeters: number
   +toMeters: number
+  +toInches: ?number
+  +fromInches: ?number
 
-  constructor(id: string, type: Length, fromMeters: number, toMeters: number) {
+  constructor(
+    id: string,
+    type: Length,
+    fromMeters: number,
+    toMeters: number,
+    toInches?: number,
+    fromInches?: number
+  ) {
     this.id = id
     this.type = type
     this.fromMeters = fromMeters
     this.toMeters = toMeters
+    this.fromInches = fromInches
+    this.toInches = toInches
   }
 
   convert(value: number, to: Unit<Length>): number {
+    if (this.toInches && (to: any).fromInches) {
+      return value * this.toInches * (to: any).fromInches
+    }
     return value * this.toMeters * (to: any).fromMeters
   }
 
@@ -35,25 +49,33 @@ export default class Length implements UnitType {
     'ft',
     Length.type,
     1 / 0.3048,
-    0.3048
+    0.3048,
+    12,
+    1 / 12
   )
   static inches: LengthUnit = new LengthUnit(
     'in',
     Length.type,
-    1 / 12 / 0.3048,
-    0.3048 / 12
+    12 / 0.3048,
+    0.3048 / 12,
+    1,
+    1
   )
   static yards: LengthUnit = new LengthUnit(
     'yd',
     Length.type,
-    1 / (0.3048 * 3),
-    3 * 0.3048
+    1 / (3 * 0.3048),
+    3 * 0.3048,
+    36,
+    1 / 36
   )
   static miles: LengthUnit = new LengthUnit(
     'mi',
     Length.type,
-    1 / (0.3048 * 5280),
-    5280 * 0.3048
+    1 / (5280 * 0.3048),
+    5280 * 0.3048,
+    5280 * 12,
+    1 / (5280 * 12)
   )
   static meters: LengthUnit = new LengthUnit('m', Length.type, 1, 1)
   static centimeters: LengthUnit = new LengthUnit('cm', Length.type, 100, 0.01)

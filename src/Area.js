@@ -8,18 +8,30 @@ class AreaUnit implements Unit<Area> {
   +id: string
   +type: Area
   +sideUnit: Unit<Length>
-  +fromBase: number
-  +toBase: number
+  +fromSquareMeters: number
+  +toSquareMeters: number
+  +fromSquareInches: ?number
+  +toSquareInches: ?number
 
   constructor(type: Area, sideUnit: LengthUnit) {
     this.id = 'sq ' + sideUnit.id
+    this.sideUnit = sideUnit
     this.type = type
-    this.fromBase = sideUnit.fromMeters * sideUnit.fromMeters
-    this.toBase = sideUnit.toMeters * sideUnit.toMeters
+    this.fromSquareMeters = sideUnit.fromMeters * sideUnit.fromMeters
+    this.toSquareMeters = sideUnit.toMeters * sideUnit.toMeters
+    this.fromSquareInches = sideUnit.fromInches
+      ? sideUnit.fromInches * sideUnit.fromInches
+      : null
+    this.toSquareInches = sideUnit.toInches
+      ? sideUnit.toInches * sideUnit.toInches
+      : null
   }
 
   convert(value: number, to: Unit<Area>): number {
-    return value * this.toBase * (to: any).fromBase
+    if (this.toSquareInches && (to: any).fromSquareInches) {
+      return value * this.toSquareInches * (to: any).fromSquareInches
+    }
+    return value * this.toSquareMeters * (to: any).fromSquareMeters
   }
 
   of(value: number): UnitizedNumber<Area> {
