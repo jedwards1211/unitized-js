@@ -11,13 +11,13 @@ export default class UnitizedNumber<T: UnitType> {
       _value: {
         value,
         writable: false,
-        enumerable: false,
+        enumerable: true,
         configurable: false,
       },
       unit: {
         value: unit,
         writable: false,
-        enumerable: false,
+        enumerable: true,
         configurable: false,
       },
     })
