@@ -1,5 +1,5 @@
 // @flow
-import { type UnitType, type Unit } from './Unit'
+import { type UnitType, type Unit, assertSameType } from './Unit'
 import UnitizedNumber from './UnitizedNumber'
 
 export class AngleUnit implements Unit<Angle> {
@@ -16,6 +16,7 @@ export class AngleUnit implements Unit<Angle> {
   }
 
   convert(value: number, to: Unit<Angle>): number {
+    assertSameType(this, to)
     if (to === this) return value
     if ((to: any).constructor === this.constructor) {
       return (value * (to: any).halfRange) / this.halfRange
@@ -34,6 +35,10 @@ export class AngleUnit implements Unit<Angle> {
   fromRadians(value: number): number {
     return (value * this.halfRange) / Math.PI
   }
+
+  toString(): string {
+    return this.id
+  }
 }
 
 export class PercentGradeUnit extends AngleUnit {
@@ -51,8 +56,7 @@ export default class Angle implements UnitType {
   static degrees: AngleUnit = new AngleUnit('deg', Angle.type, 180)
   static radians: AngleUnit = new AngleUnit('rad', Angle.type, Math.PI)
   static gradians: AngleUnit = new AngleUnit('grad', Angle.type, 200)
-  static milsNATO: AngleUnit = new AngleUnit('mil', Angle.type, 3200)
-  static milsNATO: AngleUnit = new AngleUnit('mil', Angle.type, 3200)
+  static mils: AngleUnit = new AngleUnit('mil', Angle.type, 3200)
   static percentGrade: AngleUnit = new PercentGradeUnit('%', Angle.type, NaN)
 
   static sin(angle: UnitizedNumber<Angle>): number {

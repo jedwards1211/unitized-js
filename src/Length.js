@@ -1,6 +1,6 @@
 // @flow
 
-import { type Unit, type UnitType } from './Unit'
+import { type Unit, type UnitType, assertSameType } from './Unit'
 import UnitizedNumber from './UnitizedNumber'
 
 export class LengthUnit implements Unit<Length> {
@@ -28,6 +28,8 @@ export class LengthUnit implements Unit<Length> {
   }
 
   convert(value: number, to: Unit<Length>): number {
+    assertSameType(this, to)
+    if (to === this) return value
     if (this.toInches && (to: any).fromInches) {
       return value * this.toInches * (to: any).fromInches
     }

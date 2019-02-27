@@ -1,6 +1,6 @@
 // @flow
 
-import { type Unit, type UnitType } from './Unit'
+import { type Unit, type UnitType, assertSameType } from './Unit'
 import Length, { LengthUnit } from './Length'
 import UnitizedNumber from './UnitizedNumber'
 
@@ -28,6 +28,8 @@ class AreaUnit implements Unit<Area> {
   }
 
   convert(value: number, to: Unit<Area>): number {
+    assertSameType(this, to)
+    if (to === this) return value
     if (this.toSquareInches && (to: any).fromSquareInches) {
       return value * this.toSquareInches * (to: any).fromSquareInches
     }

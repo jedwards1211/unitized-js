@@ -10,3 +10,9 @@ export interface Unit<T: UnitType> {
 }
 
 export interface UnitType {}
+
+export function assertSameType(from: Unit<any>, to: Unit<any>) {
+  if (from.type !== to.type) {
+    throw new Error(`can't convert from ${from.toString()} to ${to.toString()}`)
+  }
+}

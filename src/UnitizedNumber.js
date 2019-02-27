@@ -3,31 +3,43 @@
 import { type UnitType, type Unit } from './Unit'
 
 export default class UnitizedNumber<T: UnitType> {
-  +value: number
+  +_value: number
   +unit: Unit<T>
 
   constructor(value: number, unit: Unit<T>) {
-    this.value = value
-    this.unit = unit
+    Object.defineProperties((this: any), {
+      _value: {
+        value,
+        writable: false,
+        enumerable: false,
+        configurable: false,
+      },
+      unit: {
+        value: unit,
+        writable: false,
+        enumerable: false,
+        configurable: false,
+      },
+    })
   }
 
   add(addend: UnitizedNumber<T>): UnitizedNumber<T> {
-    return new UnitizedNumber(this.value + addend.get(this.unit), this.unit)
+    return new UnitizedNumber(this._value + addend.get(this.unit), this.unit)
   }
 
   isFinite(): boolean {
-    return Number.isFinite(this.value)
+    return Number.isFinite(this._value)
   }
 
   isNaN(): boolean {
-    return isNaN(this.value)
+    return isNaN(this._value)
   }
 
   get(unit: Unit<T>): number {
     if (unit === this.unit) {
-      return this.value
+      return this._value
     }
-    return this.unit.convert(this.value, unit)
+    return this.unit.convert(this._value, unit)
   }
 
   in(unit: Unit<T>): UnitizedNumber<T> {
@@ -38,58 +50,68 @@ export default class UnitizedNumber<T: UnitType> {
   }
 
   negate(): UnitizedNumber<T> {
-    return new UnitizedNumber(-this.value, this.unit)
+    return new UnitizedNumber(-this._value, this.unit)
   }
 
   sub(addend: UnitizedNumber<T>): UnitizedNumber<T> {
-    return new UnitizedNumber(this.value - addend.get(this.unit), this.unit)
+    return new UnitizedNumber(this._value - addend.get(this.unit), this.unit)
   }
 
   mul(multiplicand: number): UnitizedNumber<T> {
-    return new UnitizedNumber(this.value * multiplicand, this.unit)
+    return new UnitizedNumber(this._value * multiplicand, this.unit)
   }
 
   isNegative(): boolean {
-    return this.value < 0
+    return this._value < 0
   }
 
   isPositive(): boolean {
-    return this.value > 0
+    return this._value > 0
   }
 
   isZero(): boolean {
-    return this.value == 0
+    return this._value === 0
   }
 
   isNonzero(): boolean {
-    return this.value != 0
+    return this._value !== 0
   }
 
   mod(modulus: UnitizedNumber<T>): UnitizedNumber<T> {
-    const newValue = this.value % modulus.get(this.unit)
-    return newValue === this.value
+    const newValue = this._value % modulus.get(this.unit)
+    return newValue === this._value
       ? this
       : new UnitizedNumber(newValue, this.unit)
   }
 
   abs(): UnitizedNumber<T> {
-    return this.value < 0 ? this.negate() : this
+    return this._value < 0 ? this.negate() : this
   }
 
   divAwayUnit(denominator: UnitizedNumber<T>): number {
-    return this.value / denominator.get(this.unit)
+    return this._value / denominator.get(this.unit)
   }
 
   div(denominator: number): UnitizedNumber<T> {
-    return new UnitizedNumber(this.value / denominator, this.unit)
+    return new UnitizedNumber(this._value / denominator, this.unit)
   }
 
   compareTo(other: UnitizedNumber<T>): number {
     const otherValue = other.get(this.unit)
-    return this.value > otherValue ? 1 : this.value < otherValue ? -1 : 0
+    return this._value > otherValue ? 1 : this._value < otherValue ? -1 : 0
   }
 
   toString(): string {
-    return `${this.value} ${this.unit.toString()}`
+    return `${this._value} ${this.unit.toString()}`
+  }
+}
+
+/* eslint-disable no-undef */
+
+if (typeof process !== 'undefined' && process.platform !== 'browser') {
+  ;(UnitizedNumber.prototype: any)[
+    require('util').inspect.custom
+  ] = function(): string {
+    return this.toString()
   }
 }
