@@ -7,20 +7,8 @@ export default class UnitizedNumber<T: UnitType> {
   +unit: Unit<T>
 
   constructor(value: number, unit: Unit<T>) {
-    Object.defineProperties((this: any), {
-      _value: {
-        value,
-        writable: false,
-        enumerable: true,
-        configurable: false,
-      },
-      unit: {
-        value: unit,
-        writable: false,
-        enumerable: true,
-        configurable: false,
-      },
-    })
+    this._value = value
+    this.unit = unit
   }
 
   add(addend: UnitizedNumber<T>): UnitizedNumber<T> {
